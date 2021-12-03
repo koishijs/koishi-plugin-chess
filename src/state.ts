@@ -1,7 +1,7 @@
 /* global BigInt */
 
 import type * as puppeteer from '@koishijs/plugin-puppeteer'
-import { Session } from 'koishi'
+import { Context, Session } from 'koishi'
 
 const numbers = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
 const alphabet = 'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ'
@@ -20,13 +20,11 @@ export class State {
   next: string
   bBoard = 0n
   wBoard = 0n
+  ctx: Context
   history: bigint[] = []
   readonly area: bigint
   readonly full: bigint
-  imageMode: boolean
   update: (this: State, x: number, y: number, value: 1 | -1) => MoveResult | string
-
-  static imageMode: boolean
 
   constructor(public readonly rule: string, public readonly size: number, public readonly placement: 'cross' | 'grid') {
     this.area = BigInt(size * size)
@@ -164,8 +162,8 @@ export class State {
 
   async draw(session: Session, message = '', x?: number, y?: number) {
     if (message) message += '\n'
-    if (this.imageMode ?? State.imageMode) {
-      message += await this.drawSvg(x, y).render(session.app)
+    if (this.ctx && session.app.puppeteer) {
+      message += await this.drawSvg(x, y).render(this.ctx)
     } else {
       message += this.drawText(x, y)
     }

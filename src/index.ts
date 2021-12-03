@@ -36,28 +36,14 @@ const states: Dict<State> = {}
 
 export * from './state'
 
-export interface Config {}
-
 export const name = 'chess'
 
-export const schema: Schema<Config> = Schema.object({})
+export interface Config {}
+
+export const Config: Schema<Config> = Schema.object({})
 
 export function apply(ctx: Context) {
   ctx = ctx.guild()
-
-  State.imageMode = !!ctx.puppeteer
-  ctx.on('service/puppeteer', () => State.imageMode = true)
-
-  ctx.on('connect', async () => {
-    if (!ctx.database) return
-    const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
-    for (const { id, chess } of channels) {
-      if (chess) {
-        states[id] = State.from(chess)
-        states[id].update = rules[chess.rule].update
-      }
-    }
-  })
 
   ctx.command('chess [position]', '棋类游戏')
     .userFields(['name'])
@@ -228,12 +214,22 @@ export function apply(ctx: Context) {
         const state = states[session.cid]
         if (!state) return
         if (options.textMode) {
-          state.imageMode = false
+          state.ctx = null
           return state.draw(session, '已切换到文本模式。')
         } else if (options.imageMode) {
-          state.imageMode = true
+          state.ctx = ctx
           return state.draw(session, '已切换到图片模式。')
         }
       })
+  })
+
+  ctx.with(['database'], async (ctx) => {
+    const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
+    for (const { id, chess } of channels) {
+      if (chess) {
+        states[id] = State.from(chess)
+        states[id].update = rules[chess.rule].update
+      }
+    }
   })
 }
