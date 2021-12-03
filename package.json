@@ -1,22 +1,22 @@
 {
   "name": "koishi-plugin-chess",
   "description": "Playing chess games in Koishi",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-beta.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
-  "author": "Shigma <1700011071@pku.edu.cn>",
+  "author": "Shigma <shigma10826@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koishijs/koishi.git"
+    "url": "git+https://github.com/koishijs/koishi-plugin-chess.git"
   },
   "bugs": {
-    "url": "https://github.com/koishijs/koishi/issues"
+    "url": "https://github.com/koishijs/koishi-plugin-chess/issues"
   },
-  "homepage": "https://koishi.js.org/plugins/other/image-search",
+  "homepage": "https://github.com/koishijs/koishi-plugin-chess",
   "keywords": [
     "bot",
     "qqbot",
@@ -30,7 +30,7 @@
     "optional:database"
   ],
   "peerDependencies": {
-    "koishi": "^4.0.0-alpha.8",
-    "@koishijs/plugin-puppeteer": "^3.0.0-alpha.4"
+    "koishi": "^4.0.0-beta.4",
+    "@koishijs/plugin-puppeteer": "^3.0.0-beta.4"
   }
 }
