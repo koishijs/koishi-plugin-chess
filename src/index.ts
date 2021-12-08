@@ -1,14 +1,9 @@
-import { Context, Tables, isInteger, segment, Dict, Schema } from 'koishi'
+import { Context, isInteger, segment, Dict, Schema } from 'koishi'
 import { State, MoveResult, StateData } from './state'
 import {} from '@koishijs/plugin-puppeteer'
 import * as go from './go'
 import * as gomoku from './gomoku'
 import * as othello from './othello'
-
-Tables.extend('channel', {
-  // do not use shorthand because the initial value is `null`
-  chess: { type: 'json' },
-})
 
 interface Rule {
   placement?: 'grid' | 'cross'
@@ -43,6 +38,11 @@ export interface Config {}
 export const Config: Schema<Config> = Schema.object({})
 
 export function apply(ctx: Context) {
+  ctx.model.extend('channel', {
+    // do not use shorthand because the initial value is `null`
+    chess: { type: 'json' },
+  })
+
   ctx = ctx.guild()
 
   ctx.command('chess [position]', '棋类游戏')
