@@ -206,7 +206,7 @@ export function apply(ctx: Context) {
       return state.draw(session, message, x, y)
     })
 
-  ctx.with(['puppeteer'], (ctx) => {
+  ctx.using(['puppeteer'], (ctx) => {
     ctx.command('chess', { patch: true })
       .option('imageMode', '-i  使用图片模式')
       .option('textMode', '-t  使用文本模式')
@@ -223,7 +223,7 @@ export function apply(ctx: Context) {
       })
   })
 
-  ctx.with(['database'], async (ctx) => {
+  ctx.using(['database'], async (ctx) => {
     const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
     for (const { id, chess } of channels) {
       if (chess) {
