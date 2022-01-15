@@ -210,9 +210,9 @@ export function apply(ctx: Context) {
     ctx.command('chess', { patch: true })
       .option('imageMode', '-i  使用图片模式')
       .option('textMode', '-t  使用文本模式')
-      .action(({ session, options }) => {
+      .action(({ session, options, next }) => {
         const state = states[session.cid]
-        if (!state) return
+        if (!state) return next()
         if (options.textMode) {
           state.ctx = null
           return state.draw(session, '已切换到文本模式。')
@@ -220,7 +220,8 @@ export function apply(ctx: Context) {
           state.ctx = ctx
           return state.draw(session, '已切换到图片模式。')
         }
-      })
+        return next()
+      }, true)
   })
 
   ctx.using(['database'], async (ctx) => {
