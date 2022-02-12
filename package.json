@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-chess",
   "description": "Playing chess games in Koishi",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -27,10 +27,11 @@
     "plugin",
     "chess",
     "game",
-    "optional:database"
+    "optional:database",
+    "optional:puppeteer"
   ],
   "peerDependencies": {
-    "koishi": "^4.0.0",
-    "@koishijs/plugin-puppeteer": "^3.0.0"
+    "koishi": "^4.2.0",
+    "@koishijs/plugin-puppeteer": "^3.0.1"
   }
 }
