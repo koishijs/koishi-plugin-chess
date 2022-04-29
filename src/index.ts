@@ -83,7 +83,7 @@ export function apply(ctx: Context) {
         const rule = rules[options.rule]
         if (!rule) return '没有找到对应的规则。'
 
-        const state = new State(options.rule, options.size, rule.placement || 'cross')
+        const state = new State(options.rule, options.size, rule.placement || 'cross', ctx)
         state.p1 = userId
 
         if (rule.create) {
@@ -214,10 +214,10 @@ export function apply(ctx: Context) {
         const state = states[session.cid]
         if (!state) return next()
         if (options.textMode) {
-          state.ctx = null
+          state.imageMode = false
           return state.draw(session, '已切换到文本模式。')
         } else if (options.imageMode) {
-          state.ctx = ctx
+          state.imageMode = true
           return state.draw(session, '已切换到图片模式。')
         }
         return next()
@@ -228,7 +228,7 @@ export function apply(ctx: Context) {
     const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
     for (const { id, chess } of channels) {
       if (chess) {
-        states[id] = State.from(chess)
+        states[id] = State.from(chess, ctx)
         states[id].update = rules[chess.rule].update
       }
     }

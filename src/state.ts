@@ -20,13 +20,13 @@ export class State {
   next: string
   bBoard = 0n
   wBoard = 0n
-  ctx: Context
+  imageMode = true
   history: bigint[] = []
   readonly area: bigint
   readonly full: bigint
   update: (this: State, x: number, y: number, value: 1 | -1) => MoveResult | string
 
-  constructor(public readonly rule: string, public readonly size: number, public readonly placement: 'cross' | 'grid') {
+  constructor(public readonly rule: string, public readonly size: number, public readonly placement: 'cross' | 'grid', public readonly ctx: Context) {
     this.area = BigInt(size * size)
     this.full = (1n << this.area) - 1n
   }
@@ -162,7 +162,7 @@ export class State {
 
   async draw(session: Session, message = '', x?: number, y?: number) {
     if (message) message += '\n'
-    if (this.ctx && session.app.puppeteer) {
+    if (this.imageMode && session.app.puppeteer) {
       message += await this.drawSvg(x, y).render(this.ctx)
     } else {
       message += this.drawText(x, y)
@@ -201,8 +201,8 @@ export class State {
     return { rule, size, placement, p1, p2, next, history: history.join(',') }
   }
 
-  static from(data: StateData) {
-    const state = new State(data.rule, data.size, data.placement)
+  static from(data: StateData, ctx: Context) {
+    const state = new State(data.rule, data.size, data.placement, ctx)
     state.p1 = data.p1
     state.p2 = data.p2
     state.next = data.next
