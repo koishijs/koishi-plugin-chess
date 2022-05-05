@@ -5,7 +5,6 @@
     "target": "esnext",
     "module": "commonjs",
     "declaration": true,
-    "emitDeclarationOnly": true,
     "composite": true,
     "incremental": true,
     "skipLibCheck": true,
