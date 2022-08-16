@@ -1,6 +1,6 @@
 /* global BigInt */
 
-import type * as puppeteer from '@koishijs/plugin-puppeteer'
+import type * as puppeteer from 'koishi-plugin-puppeteer'
 import { Context, Session } from 'koishi'
 
 const numbers = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
@@ -68,7 +68,7 @@ export class State {
   }
 
   drawSvg(x?: number, y?: number) {
-    const { SVG } = require('@koishijs/plugin-puppeteer') as typeof puppeteer
+    const { SVG } = require('koishi-plugin-puppeteer') as typeof puppeteer
     const { size, placement } = this
     const viewSize = size + (placement === 'cross' ? 2 : 3)
     const svg = new SVG({ viewSize, size: Math.max(512, viewSize * 32) }).fill('white')

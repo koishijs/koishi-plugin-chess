@@ -1,6 +1,6 @@
 import { Context, isInteger, segment, Dict, Schema } from 'koishi'
 import { State, MoveResult, StateData } from './state'
-import {} from '@koishijs/plugin-puppeteer'
+import {} from 'koishi-plugin-puppeteer'
 import * as go from './go'
 import * as gomoku from './gomoku'
 import * as othello from './othello'

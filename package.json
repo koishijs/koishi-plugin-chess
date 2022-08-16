@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-chess",
   "description": "Playing chess games in Koishi",
-  "version": "4.0.2",
+  "version": "4.1.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -18,27 +18,46 @@
   },
   "homepage": "https://github.com/koishijs/koishi-plugin-chess",
   "scripts": {
-    "build": "tsc -b"
+    "build": "atsc -b"
   },
   "keywords": [
     "bot",
-    "qqbot",
-    "cqhttp",
-    "coolq",
     "chatbot",
     "koishi",
     "plugin",
     "chess",
     "game",
-    "optional:database",
-    "optional:puppeteer"
+    "go",
+    "gomoku",
+    "othello"
   ],
+  "koishi": {
+    "category": "game",
+    "description": {
+      "en": "Chess games (go, gomoku, othello)",
+      "zh": "棋类游戏 (围棋，五子棋，黑白棋)"
+    },
+    "service": {
+      "optional": [
+        "database",
+        "puppeteer"
+      ]
+    }
+  },
   "peerDependencies": {
-    "koishi": "^4.6.1",
-    "@koishijs/plugin-puppeteer": "^3.0.6"
+    "koishi": "^4.8.3",
+    "koishi-plugin-puppeteer": "^3.0.2"
+  },
+  "peerDependenciesMeta": {
+    "koishi-plugin-puppeteer": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "koishi": "^4.6.1",
-    "@koishijs/plugin-puppeteer": "^3.0.6"
+    "@types/node": "^17.0.45",
+    "atsc": "^1.1.1",
+    "koishi": "^4.8.5",
+    "koishi-plugin-puppeteer": "^3.0.2",
+    "typescript": "^4.7.4"
   }
 }
