@@ -1,4 +1,4 @@
-import { State, MoveResult } from './state'
+import { State, MoveResult } from '../board'
 
 export const placement = 'grid'
 

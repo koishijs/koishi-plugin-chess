@@ -1,4 +1,4 @@
-import { State, MoveResult } from './state'
+import { State, MoveResult } from '../board'
 
 export function update(this: State, x: number, y: number, value: -1 | 1): MoveResult {
   const { size } = this

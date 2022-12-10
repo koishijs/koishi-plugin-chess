@@ -1,4 +1,4 @@
-import { State } from './state'
+import { State } from '../board'
 
 const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]] as const
 

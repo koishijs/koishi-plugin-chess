@@ -1,17 +1,17 @@
 import { Context, isInteger, segment, Dict, Schema } from 'koishi'
-import { State, MoveResult, StateData } from './state'
+import { State, MoveResult, StateData } from './board'
 import {} from 'koishi-plugin-puppeteer'
-import * as go from './go'
-import * as gomoku from './gomoku'
-import * as othello from './othello'
+import * as go from './games/go'
+import * as gomoku from './games/gomoku'
+import * as othello from './games/othello'
 
-interface Rule {
+interface Game {
   placement?: 'grid' | 'cross'
   create?: (this: State) => string | void
   update?: (this: State, x: number, y: number, value: -1 | 1) => MoveResult | string
 }
 
-const rules: Dict<Rule> = {
+const games: Dict<Game> = {
   go,
   gomoku,
   othello,
@@ -21,15 +21,11 @@ declare module 'koishi' {
   interface Channel {
     chess: StateData
   }
-
-  interface Modules {
-    chess: typeof import('.')
-  }
 }
 
 const states: Dict<State> = {}
 
-export * from './state'
+export * from './board'
 
 export const name = 'chess'
 
@@ -80,7 +76,7 @@ export function apply(ctx: Context) {
           return '棋盘大小应该为不小于 2，不大于 20 的整数。'
         }
 
-        const rule = rules[options.rule]
+        const rule = games[options.rule]
         if (!rule) return '没有找到对应的规则。'
 
         const state = new State(options.rule, options.size, rule.placement || 'cross', ctx)
@@ -229,7 +225,7 @@ export function apply(ctx: Context) {
     for (const { id, chess } of channels) {
       if (chess) {
         states[id] = State.from(chess, ctx)
-        states[id].update = rules[chess.rule].update
+        states[id].update = games[chess.rule].update
       }
     }
   })
