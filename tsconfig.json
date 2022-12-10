@@ -11,6 +11,8 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strictBindCallApply": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@satorijs/element",
   },
   "include": [
     "src",
