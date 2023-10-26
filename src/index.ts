@@ -54,7 +54,7 @@ export function apply(ctx: Context) {
     .shortcut('跳过回合', { options: { skip: true } })
     .shortcut('查看棋盘', { options: { show: true } })
     .option('rule', '<rule>  设置规则，支持的规则有 go, gomoku, othello')
-    .option('size', '<size>  设置大小')
+    .option('size', '<size:number>  设置大小')
     .option('skip', '跳过回合')
     .option('repent', '悔棋')
     .option('show', '-v, --show, --view  显示棋盘')
@@ -67,11 +67,11 @@ export function apply(ctx: Context) {
     .action(async ({ session, options }, position) => {
       const { cid, userId, channel = { chess: null } } = session
 
-      if (!states[cid]) {
+      if (!states[cid]) { 
         if (position || options.stop || options.repent || options.skip) {
-          return '没有正在进行的游戏。输入“下棋”开始一轮游戏。'
+          return '没有正在进行的游戏。输入“五子棋”“黑白棋”“围棋”开始对应的一局游戏。'
         }
-
+        
         if (!isInteger(options.size) || options.size < 2 || options.size > 20) {
           return '棋盘大小应该为不小于 2，不大于 20 的整数。'
         }
@@ -202,8 +202,8 @@ export function apply(ctx: Context) {
       return state.draw(session, message, x, y)
     })
 
-  ctx.using(['puppeteer'], (ctx) => {
-    ctx.command('chess', { patch: true })
+  ctx.inject(['puppeteer'], (ctx) => {
+    ctx.command('chess')
       .option('imageMode', '-i  使用图片模式')
       .option('textMode', '-t  使用文本模式')
       .action(({ session, options, next }) => {
@@ -220,7 +220,7 @@ export function apply(ctx: Context) {
       }, true)
   })
 
-  ctx.using(['database'], async (ctx) => {
+  ctx.inject(['database'], async (ctx) => {
     const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
     for (const { id, chess } of channels) {
       if (chess) {
