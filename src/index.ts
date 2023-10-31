@@ -1,6 +1,7 @@
 import { Context, isInteger, segment, Dict, Schema } from 'koishi'
 import { State, MoveResult, StateData } from './board'
 import {} from 'koishi-plugin-puppeteer'
+import {} from '@koishijs/plugin-help'
 import * as go from './games/go'
 import * as gomoku from './games/gomoku'
 import * as othello from './games/othello'
@@ -28,6 +29,9 @@ const states: Dict<State> = {}
 export * from './board'
 
 export const name = 'chess'
+export const inject = {
+  optional: ['puppeteer', 'database'],
+}
 
 export interface Config {}
 
@@ -59,6 +63,8 @@ export function apply(ctx: Context) {
     .option('repent', '悔棋')
     .option('show', '-v, --show, --view  显示棋盘')
     .option('stop', '-e, --stop, --end  停止游戏')
+    .option('imageMode', '-i  使用图片模式', { hidden: () => !ctx.puppeteer })
+    .option('textMode', '-t  使用文本模式', { hidden: () => !ctx.puppeteer })
     .usage([
       '输入“五子棋”“黑白棋”“围棋”开始对应的一局游戏。',
       '再输入“落子 A1”将棋子落于 A1 点上。',
@@ -71,7 +77,7 @@ export function apply(ctx: Context) {
         if (position || options.stop || options.repent || options.skip) {
           return '没有正在进行的游戏。输入“五子棋”“黑白棋”“围棋”开始对应的一局游戏。'
         }
-        
+
         if (!isInteger(options.size) || options.size < 2 || options.size > 20) {
           return '棋盘大小应该为不小于 2，不大于 20 的整数。'
         }
@@ -102,6 +108,14 @@ export function apply(ctx: Context) {
       const state = states[cid]
 
       if (options.show) return state.draw(session)
+
+      if (options.textMode) {
+        state.imageMode = false
+        return state.draw(session, '已切换到文本模式。')
+      } else if (options.imageMode) {
+        state.imageMode = true
+        return state.draw(session, '已切换到图片模式。')
+      }
 
       if (state.p2 && state.p1 !== userId && state.p2 !== userId) {
         return '游戏已经开始，无法加入。'
@@ -202,25 +216,7 @@ export function apply(ctx: Context) {
       return state.draw(session, message, x, y)
     })
 
-  ctx.inject(['puppeteer'], (ctx) => {
-    ctx.command('chess')
-      .option('imageMode', '-i  使用图片模式')
-      .option('textMode', '-t  使用文本模式')
-      .action(({ session, options, next }) => {
-        const state = states[session.cid]
-        if (!state) return next()
-        if (options.textMode) {
-          state.imageMode = false
-          return state.draw(session, '已切换到文本模式。')
-        } else if (options.imageMode) {
-          state.imageMode = true
-          return state.draw(session, '已切换到图片模式。')
-        }
-        return next()
-      }, true)
-  })
-
-  ctx.inject(['database'], async (ctx) => {
+  ctx.using(['database'], async (ctx) => {
     const channels = await ctx.database.getAssignedChannels(['id', 'chess'])
     for (const { id, chess } of channels) {
       if (chess) {
