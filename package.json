@@ -45,7 +45,7 @@
     }
   },
   "peerDependencies": {
-    "koishi": "^4.15.6",
+    "koishi": "^4.16.8",
     "koishi-plugin-puppeteer": "^3.7.3"
   },
   "peerDependenciesMeta": {
@@ -54,11 +54,11 @@
     }
   },
   "devDependencies": {
-    "@koishijs/plugin-help": "^2.4.0",
+    "@koishijs/plugin-help": "^2.4.3",
     "@types/node": "^17.0.45",
     "atsc": "^1.2.2",
-    "koishi": "^4.15.6",
+    "koishi": "^4.16.8",
     "koishi-plugin-puppeteer": "^3.7.3",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   }
 }
